@@ -1,5 +1,6 @@
 import { gql } from "graphql-tag";
 import User from "../../models/UserModel/User.js";
+import { hash } from "bcryptjs";
 
 export const userTypeDefs = gql`
   extend type Query {
@@ -33,14 +34,15 @@ export const userResolver = {
   Mutation: {
     createUser: async (_, { name, email, password, role }) => {
       const exist = await User.find({ email });
-      console.log(exist);
       if (exist.length) throw new Error("Este email ya esta registrado");
+      const hashedPassword = await hash(password, 12);
       const user = new User({
         name,
         email,
-        password,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        password: hashedPassword,
+        role,
+        createdAt,
+        updatedAt,
       });
       const saveUser = await user.save();
       return saveUser;
