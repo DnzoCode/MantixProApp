@@ -5,14 +5,15 @@ import User from "./pages/User/User";
 export default function App() {
   return (
     <>
-      <Layout>
-        <BrowserRouter>
+      <BrowserRouter>
+        <Layout>
+          {/* Definición de rutas */}
           <Routes>
             <Route path="/calendar" element={<Event />} />
             <Route path="/users" element={<User />} />
           </Routes>
-        </BrowserRouter>
-      </Layout>
+        </Layout>
+      </BrowserRouter>
     </>
   );
 }

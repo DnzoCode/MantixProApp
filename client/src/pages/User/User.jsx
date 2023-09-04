@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import UserCard from "../../Components/User/UserCard";
 import { BiPlus, BiSolidGrid, BiListUl } from "react-icons/bi";
+import Modal from "../../Components/Global/Modal/Modal";
+import UserForm from "../../Components/User/UserForm";
 function User() {
+  const [openModal, setOpenModal] = useState(false);
   return (
     <>
+      <Modal setOpenModal={setOpenModal} isOpen={openModal}>
+        <div>
+          <UserForm />
+        </div>
+      </Modal>
       <div className="flex justify-between items-center p-4">
         <div></div>
         <div className="flex items-center">
@@ -13,7 +21,10 @@ function User() {
           <button className="mr-4 bg-blue-600 text-white p-2 rounded-lg flex items-center ">
             <BiSolidGrid />
           </button>
-          <button className="bg-blue-600 text-white p-2 rounded-lg flex items-center">
+          <button
+            className="bg-blue-600 text-white p-2 rounded-lg flex items-center hover:bg-blue-800 duration-100"
+            onClick={() => setOpenModal(true)}
+          >
             <BiPlus className="text-xl" />
             Add New
           </button>
