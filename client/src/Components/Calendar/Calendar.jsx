@@ -4,6 +4,9 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import multiMonthPlugin from "@fullcalendar/multimonth";
 import CalendarContent from "./CalendarContent";
+import Modal from "../Global/Modal/Modal";
+import { useState } from "react";
+import EventCard from "../Event/EventCard";
 export default function Calendar() {
   const events = [
     {
@@ -23,6 +26,10 @@ export default function Calendar() {
     // Agrega más eventos aquí
   ];
 
+  const [openModal, setOpenModal] = useState(false);
+  const [dateInfo, setDateInfo] = useState([]);
+
+  console.log(dateInfo.dateStr);
   return (
     <>
       <div className="w-full">
@@ -45,7 +52,31 @@ export default function Calendar() {
           eventContent={(eventInfo) => (
             <CalendarContent eventInfo={eventInfo} />
           )}
+          dateClick={(dateInfo) => {
+            setOpenModal(true);
+            setDateInfo(dateInfo);
+          }}
         />
+        <Modal
+          setOpenModal={setOpenModal}
+          isOpen={openModal}
+          title="Mantenimiento"
+        >
+          <div className="flex flex-col w-full">
+            <div className="flex justify-center">
+              <h1 className="font-extrabold text-3xl">{dateInfo.dateStr}</h1>
+            </div>
+            <div className="w-full grid grid-cols-2 gap-4">
+              <EventCard />
+              <EventCard />
+              <EventCard />
+              <EventCard />
+              <EventCard />
+              <EventCard />
+              <EventCard />
+            </div>
+          </div>
+        </Modal>
       </div>
     </>
   );
