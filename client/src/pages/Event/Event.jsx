@@ -2,8 +2,12 @@ import { useState } from "react";
 import Calendar from "../../Components/Calendar/Calendar";
 import Modal from "../../Components/Global/Modal/Modal";
 import { BiListUl, BiPlus, BiSolidGrid } from "react-icons/bi";
+import { useQuery } from "@apollo/client";
+import { GET_EVENTS } from "../../graphql/Event/EventQl";
 export default function Event() {
   const [openModal, setOpenModal] = useState(false);
+  const { data, loading, error } = useQuery(GET_EVENTS);
+  console.log(data);
   return (
     <>
       <Modal setOpenModal={setOpenModal} isOpen={openModal}>

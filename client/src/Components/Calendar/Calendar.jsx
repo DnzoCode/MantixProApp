@@ -62,16 +62,11 @@ export default function Calendar() {
           isOpen={openModal}
           title="Mantenimiento"
         >
-          <div className="flex flex-col w-full">
-            <div className="flex justify-center">
+          <div className="flex flex-col w-full ">
+            <div className="flex justify-center mb-8">
               <h1 className="font-extrabold text-3xl">{dateInfo.dateStr}</h1>
             </div>
-            <div className="w-full grid grid-cols-2 gap-4">
-              <EventCard />
-              <EventCard />
-              <EventCard />
-              <EventCard />
-              <EventCard />
+            <div className="w-full grid grid-cols-2 gap-4 px-4  h-auto">
               <EventCard />
               <EventCard />
             </div>

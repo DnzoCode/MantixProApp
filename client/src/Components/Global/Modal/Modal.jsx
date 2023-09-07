@@ -9,9 +9,9 @@ function Modal({ children, setOpenModal, isOpen, title }) {
         }`}
       >
         <div
-          className={`bg-white w-full md:w-2/4 lg:w-3/4 rounded-xl shadow-lg h-3/4 p-4 lg:h-5/6`}
+          className={`bg-white w-full md:w-2/4 lg:w-3/4 rounded-xl shadow-lg h-3/4 p-4 lg:h-5/6 overflow-auto`}
         >
-          <div className="flex w-full justify-between ">
+          <div className="flex w-full justify-between">
             <span className="font-bold">{title}</span>
             <BiX
               className="text-3xl cursor-pointer"
