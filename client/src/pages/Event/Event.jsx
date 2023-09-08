@@ -4,10 +4,12 @@ import Modal from "../../Components/Global/Modal/Modal";
 import { BiListUl, BiPlus, BiSolidGrid } from "react-icons/bi";
 import { useQuery } from "@apollo/client";
 import { GET_EVENTS } from "../../graphql/Event/EventQl";
+import LoadPage from "../../Components/Global/LoadPage";
+
 export default function Event() {
   const [openModal, setOpenModal] = useState(false);
   const { data, loading, error } = useQuery(GET_EVENTS);
-  console.log(data);
+  if (loading) return <LoadPage />;
   return (
     <>
       <Modal setOpenModal={setOpenModal} isOpen={openModal}>
@@ -25,9 +27,9 @@ export default function Event() {
           </button>
         </div>
       </div>
-      <div className="flex gap-4 ">
-        <div className="bg-white p-4 rounded-lg shadow-xl col-span-4 lg:col-span-3 w-full flex justify-strech items-stretch">
-          <Calendar />
+      <div className="flex flex-col justify-stretch items-center w-full h-full">
+        <div className="bg-white rounded-lg shadow-xl p-4">
+          <Calendar data={data} />
         </div>
       </div>
     </>

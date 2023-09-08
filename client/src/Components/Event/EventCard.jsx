@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { BiCaretDown, BiSolidHandLeft } from "react-icons/bi";
-function EventCard() {
+function EventCard({ eventInfo }) {
   const [openDialog, setOpenDialog] = useState(false);
 
   const handleOpenDialog = () => {
     openDialog ? setOpenDialog(false) : setOpenDialog(true);
   };
-
+  console.log(eventInfo.maquina.maquina_name);
   return (
     <>
       <div className="w-full bg-white shadow-lg rounded-xl flex flex-col items-center h-auto">
