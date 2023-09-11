@@ -1,18 +1,41 @@
 import { gql } from "graphql-tag";
+import { GraphQLScalarType, Kind } from "graphql";
 import Maquina from "../../models/MaquinaModel/Maquina.js";
 import Event from "../../models/EventModel/Event.js";
 import Tecnico from "../../models/TecnicoModel/Tecnico.js";
 import Proveedor from "../../models/ProveedorModel/Proveedor.js";
 
+// Define un tipo para representar fechas
+const resolverMap = {
+  Date: new GraphQLScalarType({
+    name: "Date",
+    description: "Date custom scalar type",
+    parseValue(value) {
+      return new Date(value); // value from the client
+    },
+    serialize(value) {
+      return value.getTime(); // value sent to the client
+    },
+    parseLiteral(ast) {
+      if (ast.kind === Kind.INT) {
+        return new Date(+ast.value); // ast value is always in string format
+      }
+      return null;
+    },
+  }),
+};
+
 export const eventTypeDefs = gql`
+  scalar Date
   extend type Query {
     events: [Event]
     event(_id: ID!): Event
+    eventPorFecha(start: String!): [Event]
   }
   extend type Mutation {
     createEvent(
       title: String
-      start: String
+      start: Date
       end: String
       description: String
       maquina: ID
@@ -27,8 +50,8 @@ export const eventTypeDefs = gql`
   type Event {
     _id: ID
     title: String
-    start: String
-    end: String
+    start: Date
+    end: Date
     description: String
     maquina: Maquina
     tecnico_id: Tecnico
@@ -37,8 +60,8 @@ export const eventTypeDefs = gql`
     proveedor: Proveedor
     turno: String
     mensaje_reprogramado: String
-    createdAt: String
-    updatedAt: String
+    createdAt: Date
+    updatedAt: Date
   }
 `;
 
@@ -46,6 +69,11 @@ export const eventResolver = {
   Query: {
     events: async () => await Event.find(),
     event: async (_, { _id }) => await Event.findById(_id),
+    eventPorFecha: async (_, { start }) => {
+      const startDate = new Date(start);
+      const event = await Event.find({ start: startDate });
+      return event;
+    },
   },
   Mutation: {
     createEvent: async (

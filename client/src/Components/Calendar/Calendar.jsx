@@ -2,15 +2,26 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import multiMonthPlugin from "@fullcalendar/multimonth";
 import CalendarContent from "./CalendarContent";
 import Modal from "../Global/Modal/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EventCard from "../Event/EventCard";
+import LoadComponent from "../LoadComponent/LoadComponent";
+import { GET_EVENT_FECHA } from "../../graphql/Event/EventQl";
+import { useQuery } from "@apollo/client";
 export default function Calendar({ data }) {
   const [openModal, setOpenModal] = useState(false);
   const [dateInfo, setDateInfo] = useState([]);
-
+  const [allEventsCompleted, setAllEventsCompleted] = useState(false);
+  const {
+    data: dataEvent,
+    loading,
+    error,
+  } = useQuery(GET_EVENT_FECHA, {
+    variables: {
+      start: dateInfo?.dateStr || null,
+    },
+  });
   return (
     <>
       <FullCalendar
@@ -28,27 +39,44 @@ export default function Calendar({ data }) {
           end: "dayGridMonth,timeGridWeek,timeGridDay",
         }}
         handleWindowResize
-        locale={"es"}
         eventContent={(eventInfo) => <CalendarContent eventInfo={eventInfo} />}
         dateClick={(dateInfo) => {
           setOpenModal(true);
           setDateInfo(dateInfo);
         }}
+        timeZone="UTC"
       />
       <Modal
         setOpenModal={setOpenModal}
         isOpen={openModal}
         title="Mantenimiento"
       >
-        <div className="flex flex-col w-full ">
-          <div className="flex justify-center mb-8">
-            <h1 className="font-extrabold text-3xl">{dateInfo.dateStr}</h1>
-          </div>
-          <div className="w-full grid grid-cols-2 gap-4 px-4  h-auto">
-            {data.events.map((event) => (
-              <EventCard key={event._id} eventInfo={event} />
-            ))}
-          </div>
+        <div className="flex flex-col w-full h-full">
+          {loading ? (
+            <LoadComponent />
+          ) : (
+            <>
+              <div className="flex justify-between mb-8 px-12">
+                <h1 className="font-extrabold text-3xl">{dateInfo.dateStr}</h1>
+
+                <button
+                  className="bg-green-400 rounded-lg text-white p-2"
+                  disabled={allEventsCompleted}
+                >
+                  Cerrar Dia
+                </button>
+              </div>
+              <div className="w-full grid grid-cols-2 gap-4 px-4  h-auto">
+                {dataEvent?.eventPorFecha?.length == 0 ? (
+                  <p>No hay Eventos</p>
+                ) : (
+                  dataEvent?.eventPorFecha?.map((event) => (
+                    <EventCard key={event._id} eventInfo={event} />
+                  ))
+                )}
+              </div>
+            </>
+          )}
         </div>
       </Modal>
     </>

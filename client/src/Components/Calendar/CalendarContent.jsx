@@ -35,9 +35,7 @@ function CalendarContent({ eventInfo }) {
             </span>
           </div>
           <div className="w-full flex flex-col justify-end items-start">
-            <span>
-              {tecnico_id.tecnico_name} {tecnico_id.tecnico_apellido}
-            </span>
+            <span></span>
             <span className="font-bold">{status}</span>
           </div>
         </div>

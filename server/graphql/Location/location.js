@@ -1,8 +1,30 @@
 import { gql } from "graphql-tag";
 import Location from "../../models/LocationModel/Location.js";
 import Maquina from "../../models/MaquinaModel/Maquina.js";
+import { GraphQLScalarType, Kind } from "graphql";
+
+const resolverMap = {
+  Date: new GraphQLScalarType({
+    name: "Date",
+    description: "Date custom scalar type",
+    parseValue(value) {
+      return new Date(value); // value from the client
+    },
+    serialize(value) {
+      return value.getTime(); // value sent to the client
+    },
+    parseLiteral(ast) {
+      if (ast.kind === Kind.INT) {
+        return new Date(+ast.value); // ast value is always in string format
+      }
+      return null;
+    },
+  }),
+};
 
 export const locationTypeDefs = gql`
+  scalar Date
+
   extend type Query {
     locations: [Location]
     location(_id: ID!): Location
@@ -14,8 +36,8 @@ export const locationTypeDefs = gql`
     _id: ID
     location_name: String
     maquina: [Maquina]
-    createdAt: String
-    updatedAt: String
+    createdAt: Date
+    updatedAt: Date
   }
 `;
 
