@@ -11,3 +11,15 @@
 body {
   scroll-behavior: smooth;
 }
+
+.radio-button {
+  @apply appearance-none bg-white h-full w-full rounded-lg absolute shadow-lg before:absolute;
+}
+.radio-button::before {
+  content: "";
+  @apply absolute h-3 w-3 bg-gray-200 border rounded-full;
+}
+.radio-button::after {
+  content: "";
+  @apply absolute h-3 w-3 bg-transparent rounded-full;
+}

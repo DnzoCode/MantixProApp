@@ -1,17 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 
 //border-yellow-200
-function EventMode({ mode }) {
+function EventMode({ mode, open }) {
   return (
     <>
       <div
-        className={`w-full h-auto p-2 flex flex-col items-center border-4 rounded-lg ${
-          mode == "R"
-            ? "border-yellow-200"
-            : mode == "E"
-            ? "border-blue-300"
-            : "hidden"
-        }`}
+        className={`w-full h-auto p-2  items-center border-4 rounded-lg ${
+          mode == "R" ? "border-yellow-200" : "border-blue-300"
+        } ${open ? "flex flex-col" : "hidden"}`}
       >
         {mode == "R" && (
           <>

@@ -4,6 +4,7 @@ import EventMode from "./EventMode";
 function EventCard({ eventInfo }) {
   const [openDialog, setOpenDialog] = useState({});
   const [mode, setMode] = useState("");
+  const [openFunction, setOpenFunction] = useState(false);
 
   const handleOpenDialog = (eventId) => {
     setOpenDialog((prevState) => ({
@@ -11,7 +12,6 @@ function EventCard({ eventInfo }) {
       [eventId]: !prevState[eventId],
     }));
   };
-  console.log(eventInfo);
   const statusColors = {
     yellow: "bg-yellow-400",
     blue: "bg-blue-400",
@@ -21,6 +21,8 @@ function EventCard({ eventInfo }) {
 
   const handleChangeMode = (modeParameter) => {
     modeParameter == "R" ? setMode("R") : setMode("E");
+    openFunction ? setOpenFunction(false) : setOpenFunction(true);
+    console.log(openFunction);
   };
   return (
     <>
@@ -87,18 +89,26 @@ function EventCard({ eventInfo }) {
           <div className="w-full flex justify-evenly my-4">
             <button
               className="bg-yellow-300 w-1/2 mt-4 p-2 mx-2 rounded-md"
-              onClick={() => handleChangeMode("R")}
+              onClick={() => {
+                handleChangeMode("R");
+              }}
             >
               Reprogramar
             </button>
             <button
               className="bg-blue-600 w-1/2 mt-4 p-2 mx-2 rounded-md text-white"
-              onClick={() => handleChangeMode("E")}
+              onClick={() => {
+                handleChangeMode("E");
+              }}
             >
               Ejecutar
             </button>
           </div>
-          {mode ? <EventMode mode={mode} /> : <EventMode mode={mode} />}
+          {mode ? (
+            <EventMode mode={mode} open={openFunction} />
+          ) : (
+            <EventMode mode={mode} open={openFunction} />
+          )}
         </div>
       </div>
     </>

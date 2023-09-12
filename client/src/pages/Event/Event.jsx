@@ -5,6 +5,7 @@ import { BiListUl, BiPlus, BiSolidGrid } from "react-icons/bi";
 import { useQuery } from "@apollo/client";
 import { GET_EVENTS } from "../../graphql/Event/EventQl";
 import LoadPage from "../../Components/Global/LoadPage";
+import EventForm from "../../Components/Event/EventForm";
 
 export default function Event() {
   const [openModal, setOpenModal] = useState(false);
@@ -12,8 +13,12 @@ export default function Event() {
   if (loading) return <LoadPage />;
   return (
     <>
-      <Modal setOpenModal={setOpenModal} isOpen={openModal}>
-        <div></div>
+      <Modal
+        title={"Programar Mantenimiento"}
+        setOpenModal={setOpenModal}
+        isOpen={openModal}
+      >
+        <EventForm />
       </Modal>
       <div className="flex justify-between items-center p-4">
         <div></div>
