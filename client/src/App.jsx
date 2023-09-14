@@ -1,9 +1,10 @@
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-import Layout from "./Components/Global/Layout";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Event from "./pages/Event/Event";
 import User from "./pages/User/User";
 import { baseUrl } from "./composables/useConfig";
+import Maintenance from "./pages/Maintenance/Maintenance";
+import Login from "./pages/auth/Login/Login";
 
 const client = new ApolloClient({
   uri: baseUrl,
@@ -15,13 +16,13 @@ export default function App() {
     <>
       <ApolloProvider client={client}>
         <BrowserRouter>
-          <Layout>
-            {/* Definición de rutas */}
-            <Routes>
-              <Route path="/calendar" element={<Event />} />
-              <Route path="/users" element={<User />} />
-            </Routes>
-          </Layout>
+          {/* Definición de rutas */}
+          <Routes>
+            <Route path="/calendar" element={<Event />} />
+            <Route path="/users" element={<User />} />
+            <Route path="/maintenance/add" element={<Maintenance />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
         </BrowserRouter>
       </ApolloProvider>
     </>

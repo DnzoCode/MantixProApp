@@ -12,14 +12,43 @@ body {
   scroll-behavior: smooth;
 }
 
-.radio-button {
-  @apply appearance-none bg-white h-full w-full rounded-lg absolute shadow-lg before:absolute;
+.input-container {
+  @apply relative h-20 w-20 m-2 mb-12;
 }
-.radio-button::before {
-  content: "";
-  @apply absolute h-3 w-3 bg-gray-200 border rounded-full;
+
+.input-container.large {
+  @apply relative h-20 w-32 m-2 mb-12;
 }
-.radio-button::after {
-  content: "";
-  @apply absolute h-3 w-3 bg-transparent rounded-full;
+
+.input-container input {
+  @apply absolute h-full w-full m-0 cursor-pointer z-10 opacity-0;
+}
+
+.input-container .radio-title {
+  @apply flex flex-col items-center justify-center h-full border-2 border-dark-purple rounded-lg duration-300;
+}
+
+.input-container .icon {
+  @apply text-dark-purple text-4xl;
+}
+
+.input-container label {
+  @apply text-dark-purple text-sm font-bold uppercase;
+}
+.input-container label.large-text {
+  @apply text-dark-purple text-xs font-bold uppercase;
+}
+
+.radio-button:checked + .radio-title {
+  @apply bg-dark-purple shadow-lg;
+  transform: scale(1.1);
+}
+
+.radio-button:hover + .radio-title {
+  @apply shadow-sm;
+}
+
+.radio-button:checked + .radio-title .icon,
+.radio-button:checked + .radio-title label {
+  color: white;
 }

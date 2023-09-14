@@ -31,7 +31,7 @@ export default function Sidebar() {
       icon: <BiSolidWrench className="text-2xl mr-2" />,
       title: "Registrar Mantenimiento",
       active: false,
-      to: "/mantenimiento/add",
+      to: "/maintenance/add",
     },
     {
       icon: <BiSolidGroup className="text-2xl mr-2" />,

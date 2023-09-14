@@ -71,8 +71,7 @@ export const GET_EVENT = gql`
 
 export const CREATE_EVENTS = gql`
   mutation (
-    $title: String
-    $start: String
+    $start: Date
     $end: String
     $maquina: ID
     $tecnicoId: ID
@@ -82,7 +81,6 @@ export const CREATE_EVENTS = gql`
     $mensajeReprogramado: String
   ) {
     createEvent(
-      title: $title
       start: $start
       end: $end
       maquina: $maquina
