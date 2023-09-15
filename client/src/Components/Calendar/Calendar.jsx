@@ -71,7 +71,11 @@ export default function Calendar({ data }) {
                   <p>No hay Eventos</p>
                 ) : (
                   dataEvent?.eventPorFecha?.map((event) => (
-                    <EventCard key={event._id} eventInfo={event} />
+                    <EventCard
+                      key={event._id}
+                      eventInfo={event}
+                      dateString={dateInfo.dateStr}
+                    />
                   ))
                 )}
               </div>

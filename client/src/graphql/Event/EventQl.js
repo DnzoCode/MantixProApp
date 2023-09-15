@@ -132,3 +132,26 @@ export const GET_EVENT_FECHA = gql`
     }
   }
 `;
+
+export const REPROGRAMAR_EVENT = gql`
+  mutation (
+    $id: ID!
+    $start: Date
+    $end: String
+    $mensajeReprogramado: String
+    $status: String
+  ) {
+    reprogramarEvent(
+      _id: $id
+      start: $start
+      end: $end
+      mensaje_reprogramado: $mensajeReprogramado
+      status: $status
+    ) {
+      _id
+      start
+      status
+      mensaje_reprogramado
+    }
+  }
+`;

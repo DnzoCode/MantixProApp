@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BiCaretDown, BiSolidHandLeft } from "react-icons/bi";
 import EventMode from "./EventMode";
-function EventCard({ eventInfo }) {
+function EventCard({ eventInfo, dateString }) {
   const [openDialog, setOpenDialog] = useState({});
   const [mode, setMode] = useState("");
   const [openFunction, setOpenFunction] = useState(false);
@@ -105,9 +105,21 @@ function EventCard({ eventInfo }) {
             </button>
           </div>
           {mode ? (
-            <EventMode mode={mode} open={openFunction} />
+            <EventMode
+              mode={mode}
+              open={openFunction}
+              eventId={eventInfo._id}
+              tecnicoId={eventInfo.tecnico_id?._id}
+              dateInfo={dateString}
+            />
           ) : (
-            <EventMode mode={mode} open={openFunction} />
+            <EventMode
+              mode={mode}
+              open={openFunction}
+              eventId={eventInfo._id}
+              tecnicoId={eventInfo.tecnico_id?._id}
+              dateInfo={dateString}
+            />
           )}
         </div>
       </div>

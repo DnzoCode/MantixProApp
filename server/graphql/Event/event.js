@@ -46,6 +46,13 @@ export const eventTypeDefs = gql`
       turno: String
       mensaje_reprogramado: String
     ): Event
+    reprogramarEvent(
+      _id: ID!
+      start: Date
+      end: String
+      status: String
+      mensaje_reprogramado: String
+    ): Event
   }
   type Event {
     _id: ID
@@ -115,6 +122,21 @@ export const eventResolver = {
       });
       const saveEvent = await event.save();
       return saveEvent;
+    },
+    reprogramarEvent: async (
+      _,
+      { _id, start, end, status, mensaje_reprogramado }
+    ) => {
+      const reprogramar = await Event.findByIdAndUpdate(_id, {
+        start,
+        end,
+        status,
+        mensaje_reprogramado,
+      });
+
+      if (!reprogramar) throw new Error("Mantenimiento no encontrado");
+
+      return reprogramar;
     },
   },
   Event: {

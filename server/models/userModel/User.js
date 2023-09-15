@@ -31,6 +31,7 @@ const userSchema = new Schema(
       default: "Activo",
       require: true,
     },
+    token: { type: String },
     isDeleted: { type: Boolean, defaults: false },
   },
   {
