@@ -13,13 +13,15 @@ export const workOrderTypeDefs = gql`
     createWorkOrder(
       work_order: String
       event_id: ID
-      owner: ID
-      tecnico_id: ID
       trabajo_realizado: String
       diagnostico: String
-      actividades: String
       hora_inicio: String
+    ): WorkOrder
+    cerrarWorkOrder(
+      event_id: ID
+      owner: ID
       hora_fin: String
+      actividades: String
       causas: String
       observacion: String
     ): WorkOrder
@@ -30,7 +32,6 @@ export const workOrderTypeDefs = gql`
     work_order: String
     event_id: Event
     owner: OwnerProcess
-    tecnico_id: Tecnico
     trabajo_realizado: String
     diagnostico: String
     actividades: String
@@ -50,40 +51,39 @@ export const workOrderResolver = {
   Mutation: {
     createWorkOrder: async (
       _,
-      {
-        work_order,
-        event_id,
-        owner,
-        tecnico_id,
-        trabajo_realizado,
-        diagnostico,
-        actividades,
-        hora_inicio,
-        hora_fin,
-        causas,
-        observacion,
-      }
+      { work_order, event_id, trabajo_realizado, diagnostico, hora_inicio }
     ) => {
       const workOrder = new WorkOrder({
         work_order,
         event_id,
-        owner,
-        tecnico_id,
         trabajo_realizado,
         diagnostico,
-        actividades,
         hora_inicio,
-        hora_fin,
-        causas,
-        observacion,
       });
       const saveWorkOrder = await workOrder.save();
       return saveWorkOrder;
+    },
+    cerrarWorkOrder: async (
+      _,
+      { event_id, owner, hora_fin, actividades, causas, observacion }
+    ) => {
+      const buscar = await WorkOrder.findOneAndUpdate(
+        { event_id: event_id },
+        {
+          owner,
+          hora_fin,
+          actividades,
+          causas,
+          observacion,
+        }
+      );
+
+      if (!buscar) throw new Error("WorkOrder no encontrado");
+      return buscar;
     },
   },
   WorkOrder: {
     event_id: async (parent) => await Event.findById(parent.event_id),
     owner: async (parent) => await OwnerProcess.findById(parent.owner),
-    tecnico_id: async (parent) => await Tecnico.findById(parent.tecnico_id),
   },
 };

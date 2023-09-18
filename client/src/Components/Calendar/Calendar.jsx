@@ -17,6 +17,7 @@ export default function Calendar({ data }) {
     data: dataEvent,
     loading,
     error,
+    refetch,
   } = useQuery(GET_EVENT_FECHA, {
     variables: {
       start: dateInfo?.dateStr || null,
@@ -75,6 +76,7 @@ export default function Calendar({ data }) {
                       key={event._id}
                       eventInfo={event}
                       dateString={dateInfo.dateStr}
+                      refetchData={refetch}
                     />
                   ))
                 )}

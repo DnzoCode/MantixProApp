@@ -155,3 +155,25 @@ export const REPROGRAMAR_EVENT = gql`
     }
   }
 `;
+
+export const EJECUTAR_EVENT = gql`
+  mutation ($id: ID!, $status: String, $tecnicoId: ID) {
+    ejecutarEvent(_id: $id, status: $status, tecnico_id: $tecnicoId) {
+      _id
+      ejecucion
+      tecnico_id {
+        _id
+        tecnico_name
+        tecnico_apellido
+      }
+    }
+  }
+`;
+export const COMPLETAR_EVENT = gql`
+  mutation ($id: ID!, $status: String) {
+    completarEvent(_id: $id, status: $status) {
+      _id
+      ejecucion
+    }
+  }
+`;

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BiCaretDown, BiSolidHandLeft } from "react-icons/bi";
 import EventMode from "./EventMode";
-function EventCard({ eventInfo, dateString }) {
+function EventCard({ eventInfo, dateString, refetchData }) {
   const [openDialog, setOpenDialog] = useState({});
   const [mode, setMode] = useState("");
   const [openFunction, setOpenFunction] = useState(false);
@@ -20,9 +20,12 @@ function EventCard({ eventInfo, dateString }) {
   };
 
   const handleChangeMode = (modeParameter) => {
-    modeParameter == "R" ? setMode("R") : setMode("E");
+    modeParameter == "R"
+      ? setMode("R")
+      : modeParameter == "E"
+      ? setMode("E")
+      : setMode("C");
     openFunction ? setOpenFunction(false) : setOpenFunction(true);
-    console.log(openFunction);
   };
   return (
     <>
@@ -95,14 +98,27 @@ function EventCard({ eventInfo, dateString }) {
             >
               Reprogramar
             </button>
-            <button
-              className="bg-blue-600 w-1/2 mt-4 p-2 mx-2 rounded-md text-white"
-              onClick={() => {
-                handleChangeMode("E");
-              }}
-            >
-              Ejecutar
-            </button>
+            {eventInfo.status != "En ejecucion" && (
+              <button
+                className="bg-blue-600 w-1/2 mt-4 p-2 mx-2 rounded-md text-white"
+                onClick={() => {
+                  handleChangeMode("E");
+                }}
+              >
+                Ejecutar
+              </button>
+            )}
+            {eventInfo.status != "Programado" &&
+              eventInfo.status != "Reprogramado" && (
+                <button
+                  className="bg-green-400 w-1/2 mt-4 p-2 mx-2 rounded-md text-white"
+                  onClick={() => {
+                    handleChangeMode("C");
+                  }}
+                >
+                  Completar
+                </button>
+              )}
           </div>
           {mode ? (
             <EventMode
@@ -111,6 +127,9 @@ function EventCard({ eventInfo, dateString }) {
               eventId={eventInfo._id}
               tecnicoId={eventInfo.tecnico_id?._id}
               dateInfo={dateString}
+              refetchData={refetchData}
+              ejecucion={eventInfo.ejecucion}
+              estadoEvent={eventInfo.status}
             />
           ) : (
             <EventMode
@@ -119,6 +138,9 @@ function EventCard({ eventInfo, dateString }) {
               eventId={eventInfo._id}
               tecnicoId={eventInfo.tecnico_id?._id}
               dateInfo={dateString}
+              refetchData={refetchData}
+              ejecucion={eventInfo.ejecucion}
+              estadoEvent={eventInfo.status}
             />
           )}
         </div>

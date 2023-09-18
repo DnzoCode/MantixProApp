@@ -53,6 +53,22 @@ export const eventTypeDefs = gql`
       status: String
       mensaje_reprogramado: String
     ): Event
+    ejecutarEvent(_id: ID!, status: String, tecnico_id: ID): Event
+    completarEvent(_id: ID!, status: String): Event
+    updateEvent(
+      _id: ID!
+      title: String
+      start: Date
+      end: Date
+      description: String
+      maquina: ID
+      tecnico_id: ID
+      ejecucion: String
+      status: String
+      proveedor: ID
+      turno: String
+      mensaje_reprogramado: String
+    ): Event
   }
   type Event {
     _id: ID
@@ -138,6 +154,38 @@ export const eventResolver = {
 
       return reprogramar;
     },
+    ejecutarEvent: async (_, { _id, status, tecnico_id }) => {
+      const ejecutar = await Event.findByIdAndUpdate(_id, {
+        status,
+        tecnico_id,
+      });
+      if (!ejecutar) throw new Error("Mantenimiento no encontrado");
+      return ejecutar;
+    },
+    completarEvent: async (_, { _id, status }) => {
+      const ejecutar = await Event.findByIdAndUpdate(_id, {
+        status,
+      });
+      if (!ejecutar) throw new Error("Mantenimiento no encontrado");
+      return ejecutar;
+    },
+    updateEvent: async (
+      _,
+      {
+        _id,
+        title,
+        start,
+        end,
+        description,
+        maquina,
+        tecnico_id,
+        ejecucion,
+        status,
+        proveedor,
+        turno,
+        mensaje_reprogramado,
+      }
+    ) => {},
   },
   Event: {
     maquina: async (parent) => await Maquina.findById(parent.maquina),
