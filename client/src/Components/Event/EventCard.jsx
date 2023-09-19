@@ -90,25 +90,29 @@ function EventCard({ eventInfo, dateString, refetchData }) {
             </span>
           </div>
           <div className="w-full flex justify-evenly my-4">
-            <button
-              className="bg-yellow-300 w-1/2 mt-4 p-2 mx-2 rounded-md"
-              onClick={() => {
-                handleChangeMode("R");
-              }}
-            >
-              Reprogramar
-            </button>
-            {eventInfo.status != "En ejecucion" && (
+            {eventInfo.status != "Completado" && (
               <button
-                className="bg-blue-600 w-1/2 mt-4 p-2 mx-2 rounded-md text-white"
+                className="bg-yellow-300 w-1/2 mt-4 p-2 mx-2 rounded-md"
                 onClick={() => {
-                  handleChangeMode("E");
+                  handleChangeMode("R");
                 }}
               >
-                Ejecutar
+                Reprogramar
               </button>
             )}
+            {eventInfo.status != "En ejecucion" &&
+              eventInfo.status != "Completado" && (
+                <button
+                  className="bg-blue-600 w-1/2 mt-4 p-2 mx-2 rounded-md text-white"
+                  onClick={() => {
+                    handleChangeMode("E");
+                  }}
+                >
+                  Ejecutar
+                </button>
+              )}
             {eventInfo.status != "Programado" &&
+              eventInfo.status != "Completado" &&
               eventInfo.status != "Reprogramado" && (
                 <button
                   className="bg-green-400 w-1/2 mt-4 p-2 mx-2 rounded-md text-white"
@@ -132,16 +136,7 @@ function EventCard({ eventInfo, dateString, refetchData }) {
               estadoEvent={eventInfo.status}
             />
           ) : (
-            <EventMode
-              mode={mode}
-              open={openFunction}
-              eventId={eventInfo._id}
-              tecnicoId={eventInfo.tecnico_id?._id}
-              dateInfo={dateString}
-              refetchData={refetchData}
-              ejecucion={eventInfo.ejecucion}
-              estadoEvent={eventInfo.status}
-            />
+            <></>
           )}
         </div>
       </div>

@@ -43,7 +43,6 @@ function EventForm() {
       {
         query: GET_EVENTS,
       },
-      "events",
     ],
   });
   const listTecnicos = dataTecnicos?.tecnicos.map((tecnico) => {

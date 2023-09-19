@@ -5,6 +5,7 @@ import User from "./pages/User/User";
 import { baseUrl } from "./composables/useConfig";
 import Maintenance from "./pages/Maintenance/Maintenance";
 import Login from "./pages/auth/Login/Login";
+import Maquina from "./pages/Maquina/Maquina";
 
 const client = new ApolloClient({
   uri: baseUrl,
@@ -22,6 +23,7 @@ export default function App() {
             <Route path="/users" element={<User />} />
             <Route path="/maintenance/add" element={<Maintenance />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/maquinas" element={<Maquina />} />
           </Routes>
         </BrowserRouter>
       </ApolloProvider>

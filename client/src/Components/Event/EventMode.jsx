@@ -15,7 +15,6 @@ import {
 } from "../../graphql/WorkOrder/WorkOrder";
 import { GET_OWNERS } from "../../graphql/Owners/OwnerQl";
 import Select from "react-select";
-import { isNullish } from "@apollo/client/cache/inmemory/helpers";
 //border-yellow-200
 function EventMode({
   mode,
@@ -91,18 +90,19 @@ function EventMode({
 
   const [
     reprogramarEvent,
-    { loading: loadingReprogramar, error: errorReprogramar, refetch },
+    { loading: loadingReprogramar, error: errorReprogramar },
   ] = useMutation(REPROGRAMAR_EVENT, {
     refetchQueries: [
       {
         query: GET_EVENTS,
       },
-      "events",
+      {
+        query: GET_EVENT_FECHA, // Segunda consulta que deseas refrescar
+        variables: {
+          start: dateInfo, // Asegúrate de incluir las mismas variables que usaste en la consulta original
+        },
+      },
     ],
-    onCompleted: () => {
-      // Llamada al refetch después de una mutación exitosa
-      refetchData();
-    },
   });
 
   const [crearWorkOrder, { loading: loadingWorkOrder, error: errorWorkOrder }] =
@@ -111,12 +111,13 @@ function EventMode({
         {
           query: GET_EVENTS,
         },
-        "events",
+        {
+          query: GET_EVENT_FECHA, // Segunda consulta que deseas refrescar
+          variables: {
+            start: dateInfo, // Asegúrate de incluir las mismas variables que usaste en la consulta original
+          },
+        },
       ],
-      onCompleted: () => {
-        // Llamada al refetch después de una mutación exitosa
-        refetchData();
-      },
     });
   const [
     cerrarWorkOrder,
@@ -126,12 +127,13 @@ function EventMode({
       {
         query: GET_EVENTS,
       },
-      "events",
+      {
+        query: GET_EVENT_FECHA, // Segunda consulta que deseas refrescar
+        variables: {
+          start: dateInfo, // Asegúrate de incluir las mismas variables que usaste en la consulta original
+        },
+      },
     ],
-    onCompleted: () => {
-      // Llamada al refetch después de una mutación exitosa
-      refetchData();
-    },
   });
   const [ejecutarEvent, { loading: loadingEjecutar, error: errorEjecutar }] =
     useMutation(EJECUTAR_EVENT, {
@@ -139,12 +141,13 @@ function EventMode({
         {
           query: GET_EVENTS,
         },
-        "events",
+        {
+          query: GET_EVENT_FECHA, // Segunda consulta que deseas refrescar
+          variables: {
+            start: dateInfo, // Asegúrate de incluir las mismas variables que usaste en la consulta original
+          },
+        },
       ],
-      onCompleted: () => {
-        // Llamada al refetch después de una mutación exitosa
-        refetchData();
-      },
     });
 
   const [completarEvent, { loading: loadingCompletar, error: errorCompletar }] =
@@ -153,12 +156,13 @@ function EventMode({
         {
           query: GET_EVENTS,
         },
-        "events",
+        {
+          query: GET_EVENT_FECHA, // Segunda consulta que deseas refrescar
+          variables: {
+            start: dateInfo, // Asegúrate de incluir las mismas variables que usaste en la consulta original
+          },
+        },
       ],
-      onCompleted: () => {
-        // Llamada al refetch después de una mutación exitosa
-        refetchData();
-      },
     });
 
   const handleChange = ({ target: { name, value } }) => {
@@ -183,6 +187,7 @@ function EventMode({
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (mode == "R") {
+      loadingReprogramar;
       await reprogramarEvent({
         variables: {
           id: reprogramar.id,
@@ -194,7 +199,7 @@ function EventMode({
       });
       toast.success("Mantenimiento Reprogramado para " + reprogramar.start);
     } else if (mode == "E") {
-      console.log(dateInfo);
+      loadingWorkOrder;
       await crearWorkOrder({
         variables: {
           eventId: ejecutar.event_id,
@@ -204,6 +209,7 @@ function EventMode({
           trabajoRealizado: ejecutar.trabajo_realizado,
         },
       });
+      loadingEjecutar;
       await ejecutarEvent({
         variables: {
           id: ejecutar.event_id,
@@ -213,6 +219,14 @@ function EventMode({
       });
       toast.success("Mantenimiento en ejecucion");
     } else if (mode == "C") {
+      loadingCompletar;
+      await completarEvent({
+        variables: {
+          id: completar.eventId,
+          status: completar.status,
+        },
+      });
+      loadingCerrarWorkOrder;
       await cerrarWorkOrder({
         variables: {
           eventId: completar.eventId,
@@ -223,18 +237,17 @@ function EventMode({
           observacion: completar.observacion,
         },
       });
-      await completarEvent({
-        variables: {
-          id: completar.eventId,
-          status: completar.status,
-        },
-      });
       toast.success("Mantenimiento Completado");
     }
   };
   return (
     <>
-      {loadingReprogramar ? (
+      {loadingReprogramar ||
+      loadingCompletar ||
+      loadingWorkOrder ||
+      loadingEjecutar ||
+      loadingCerrarWorkOrder ||
+      loadingCompletar ? (
         <LoadComponent />
       ) : (
         <>
@@ -293,63 +306,69 @@ function EventMode({
                 </form>
               </>
             )}
-            {mode == "E" && estadoEvent != "En ejecucion" && (
-              <>
-                <p className="font-bold">Ejecutar</p>
-                {errorWorkOrder && <p>{errorWorkOrder.message}</p>}
-                <form onSubmit={handleSubmit} className="w-full h-auto">
-                  <div className="w-full flex justify-around items-end py-2">
-                    {!tecnicoId ? (
-                      <div className="flex flex-col justify-evenly w-1/2 pr-2">
-                        <span className="pl-2">Tecnico Responsable</span>
-                        <input
-                          type="date"
-                          className="p-2 rounded-md bg-gray-200"
-                          name="start"
-                          value={reprogramar.start}
-                          onChange={handleChange}
-                        />
-                      </div>
-                    ) : (
-                      <>
-                        <div className="flex flex-col justify-evenly w-full">
-                          <span className="pl-2">Diagnostico</span>
-                          <textarea
-                            id="diagnostico"
-                            rows="2"
-                            className="p-2 rounded-md bg-gray-200 "
-                            name="diagnostico"
-                            value={ejecutar.diagnostico}
+            {mode == "E" &&
+              estadoEvent != "En ejecucion" &&
+              estadoEvent != "Completado" && (
+                <>
+                  <p className="font-bold">Ejecutar</p>
+                  {errorWorkOrder && <p>{errorWorkOrder.message}</p>}
+                  {errorEjecutar && <p>{errorEjecutar.message}</p>}
+                  <form onSubmit={handleSubmit} className="w-full h-auto">
+                    <div className="w-full flex justify-around items-end py-2">
+                      {!tecnicoId ? (
+                        <div className="flex flex-col justify-evenly w-1/2 pr-2">
+                          <span className="pl-2">Tecnico Responsable</span>
+                          <input
+                            type="date"
+                            className="p-2 rounded-md bg-gray-200"
+                            name="start"
+                            value={reprogramar.start}
                             onChange={handleChange}
-                          ></textarea>
+                          />
                         </div>
-                      </>
-                    )}
-                  </div>
-                  <div className="flex flex-col justify-evenly w-full">
-                    <span className="pl-2">Trabajo a realizar</span>
-                    <textarea
-                      id="trabajo_realizado"
-                      rows="2"
-                      className="p-2 rounded-md bg-gray-200 "
-                      name="trabajo_realizado"
-                      value={ejecutar.trabajo_realizado}
-                      onChange={handleChange}
-                    ></textarea>
-                  </div>
+                      ) : (
+                        <>
+                          <div className="flex flex-col justify-evenly w-full">
+                            <span className="pl-2">Diagnostico</span>
+                            <textarea
+                              id="diagnostico"
+                              rows="2"
+                              className="p-2 rounded-md bg-gray-200 "
+                              name="diagnostico"
+                              value={ejecutar.diagnostico}
+                              onChange={handleChange}
+                            ></textarea>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                    <div className="flex flex-col justify-evenly w-full">
+                      <span className="pl-2">Trabajo a realizar</span>
+                      <textarea
+                        id="trabajo_realizado"
+                        rows="2"
+                        className="p-2 rounded-md bg-gray-200 "
+                        name="trabajo_realizado"
+                        value={ejecutar.trabajo_realizado}
+                        onChange={handleChange}
+                      ></textarea>
+                    </div>
 
-                  <div className="flex flex-col justify-evenly w-full py-4">
-                    <button className="p-2 bg-blue-400 rounded-lg mx-2">
-                      Ejecutar
-                    </button>
-                  </div>
-                </form>
-              </>
-            )}
+                    <div className="flex flex-col justify-evenly w-full py-4">
+                      <button className="p-2 bg-blue-400 rounded-lg mx-2">
+                        Ejecutar
+                      </button>
+                    </div>
+                  </form>
+                </>
+              )}
             {mode == "C" && (
               <>
                 <p className="font-bold">Completar Mantenimiento</p>
                 {errorCompletar && <p>{errorCompletar.message}</p>}
+                {errorCerrarWorkOrder && <p>{errorCerrarWorkOrder.message}</p>}
+                {errorOwners && <p>{errorOwners.message}</p>}
+
                 <form onSubmit={handleSubmit} className="w-full h-auto">
                   <div className="w-full flex justify-around items-end py-2"></div>
                   <div className="flex flex-col justify-evenly w-full">

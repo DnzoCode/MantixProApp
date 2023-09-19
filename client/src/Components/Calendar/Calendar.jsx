@@ -71,9 +71,9 @@ export default function Calendar({ data }) {
                 {dataEvent?.eventPorFecha?.length == 0 ? (
                   <p>No hay Eventos</p>
                 ) : (
-                  dataEvent?.eventPorFecha?.map((event) => (
+                  dataEvent?.eventPorFecha?.map((event, index) => (
                     <EventCard
-                      key={event._id}
+                      key={index}
                       eventInfo={event}
                       dateString={dateInfo.dateStr}
                       refetchData={refetch}

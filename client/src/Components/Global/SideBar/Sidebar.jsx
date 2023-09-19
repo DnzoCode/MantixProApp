@@ -13,7 +13,6 @@ export default function Sidebar() {
   const [open, setOpen] = useState(true);
 
   const location = useLocation();
-  console.log(location.pathname);
   const items = [
     {
       icon: <BiSolidDashboard className="text-2xl mr-2" />,
@@ -87,10 +86,10 @@ export default function Sidebar() {
         </div>
 
         <div className={`flex flex-col justify-start `}>
-          {items.map((item) => (
+          {items.map((item, index) => (
             <Link
               to={item.to}
-              key={item.icon}
+              key={index}
               className={`flex w-full ${
                 location.pathname == item.to ? "text-white" : "text-gray-500"
               } h-auto items-center cursor-pointer duration-150 hover:text-white`}
