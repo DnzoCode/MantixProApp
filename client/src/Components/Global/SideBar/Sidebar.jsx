@@ -15,12 +15,6 @@ export default function Sidebar() {
   const location = useLocation();
   const items = [
     {
-      icon: <BiSolidDashboard className="text-2xl mr-2" />,
-      title: "Dashboard",
-      active: true,
-      to: "/dashboard",
-    },
-    {
       icon: <BiSolidCalendar className="text-2xl mr-2" />,
       title: "Calendar",
       active: false,

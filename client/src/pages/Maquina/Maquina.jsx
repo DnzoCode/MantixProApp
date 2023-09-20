@@ -5,6 +5,7 @@ import { BiListUl, BiPlus, BiSolidGrid } from "react-icons/bi";
 import MaquinaCard from "../../Components/Maquina/MaquinaCard";
 import { GET_MAQUINAS } from "../../graphql/Maquina/MaquinaQl";
 import { useQuery } from "@apollo/client";
+import MaquinaForm from "../../Components/Maquina/MaquinaForm";
 function Maquina() {
   const [openModal, setOpenModal] = useState(false);
   const { data, loading, error } = useQuery(GET_MAQUINAS);
@@ -17,7 +18,7 @@ function Maquina() {
           isOpen={openModal}
           title={"Registrar Maquina"}
         >
-          <div>SDSGHGDSG</div>
+          <MaquinaForm />
         </Modal>
 
         <div className="flex justify-between items-center p-4">
@@ -34,14 +35,14 @@ function Maquina() {
               onClick={() => setOpenModal(true)}
             >
               <BiPlus className="text-xl" />
-              Add New
+              Agregar Maquina
             </button>
           </div>
         </div>
         <div className="grid grid-cols-4 grid-rows-2 gap-4">
-          {data?.maquinas.map((maquina, index) => {
-            <MaquinaCard key={index} maquina={maquina} />;
-          })}
+          {data?.maquinas?.map((maquina, index) => (
+            <MaquinaCard key={index} maquina={maquina} />
+          ))}
         </div>
       </Layout>
     </>

@@ -29,7 +29,7 @@ export default function Event() {
               onClick={() => setOpenModal(true)}
             >
               <BiPlus className="text-xl" />
-              Add New
+              Programar Mantenimiento
             </button>
           </div>
         </div>

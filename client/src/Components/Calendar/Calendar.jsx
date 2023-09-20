@@ -2,6 +2,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import listPlugin from "@fullcalendar/list";
 import CalendarContent from "./CalendarContent";
 import Modal from "../Global/Modal/Modal";
 import { useEffect, useState } from "react";
@@ -37,7 +38,7 @@ export default function Calendar({ data }) {
         headerToolbar={{
           start: "prev,next today",
           center: "title",
-          end: "dayGridMonth,timeGridWeek,timeGridDay",
+          end: "dayGridMonth",
         }}
         handleWindowResize
         eventContent={(eventInfo) => <CalendarContent eventInfo={eventInfo} />}
@@ -46,6 +47,13 @@ export default function Calendar({ data }) {
           setDateInfo(dateInfo);
         }}
         timeZone="UTC"
+        buttonText={{
+          today: "Hoy",
+          month: "Meses",
+          week: "Semanas",
+          day: "Dia",
+          list: "Listado",
+        }}
       />
       <Modal
         setOpenModal={setOpenModal}

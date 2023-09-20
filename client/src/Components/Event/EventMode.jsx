@@ -15,6 +15,7 @@ import {
 } from "../../graphql/WorkOrder/WorkOrder";
 import { GET_OWNERS } from "../../graphql/Owners/OwnerQl";
 import Select from "react-select";
+
 //border-yellow-200
 function EventMode({
   mode,
@@ -91,79 +92,19 @@ function EventMode({
   const [
     reprogramarEvent,
     { loading: loadingReprogramar, error: errorReprogramar },
-  ] = useMutation(REPROGRAMAR_EVENT, {
-    refetchQueries: [
-      {
-        query: GET_EVENTS,
-      },
-      {
-        query: GET_EVENT_FECHA, // Segunda consulta que deseas refrescar
-        variables: {
-          start: dateInfo, // Asegúrate de incluir las mismas variables que usaste en la consulta original
-        },
-      },
-    ],
-  });
+  ] = useMutation(REPROGRAMAR_EVENT);
 
   const [crearWorkOrder, { loading: loadingWorkOrder, error: errorWorkOrder }] =
-    useMutation(CREATE_WORKORDER, {
-      refetchQueries: [
-        {
-          query: GET_EVENTS,
-        },
-        {
-          query: GET_EVENT_FECHA, // Segunda consulta que deseas refrescar
-          variables: {
-            start: dateInfo, // Asegúrate de incluir las mismas variables que usaste en la consulta original
-          },
-        },
-      ],
-    });
+    useMutation(CREATE_WORKORDER);
   const [
     cerrarWorkOrder,
     { loading: loadingCerrarWorkOrder, error: errorCerrarWorkOrder },
-  ] = useMutation(CERRAR_WORKORDER, {
-    refetchQueries: [
-      {
-        query: GET_EVENTS,
-      },
-      {
-        query: GET_EVENT_FECHA, // Segunda consulta que deseas refrescar
-        variables: {
-          start: dateInfo, // Asegúrate de incluir las mismas variables que usaste en la consulta original
-        },
-      },
-    ],
-  });
+  ] = useMutation(CERRAR_WORKORDER);
   const [ejecutarEvent, { loading: loadingEjecutar, error: errorEjecutar }] =
-    useMutation(EJECUTAR_EVENT, {
-      refetchQueries: [
-        {
-          query: GET_EVENTS,
-        },
-        {
-          query: GET_EVENT_FECHA, // Segunda consulta que deseas refrescar
-          variables: {
-            start: dateInfo, // Asegúrate de incluir las mismas variables que usaste en la consulta original
-          },
-        },
-      ],
-    });
+    useMutation(EJECUTAR_EVENT);
 
   const [completarEvent, { loading: loadingCompletar, error: errorCompletar }] =
-    useMutation(COMPLETAR_EVENT, {
-      refetchQueries: [
-        {
-          query: GET_EVENTS,
-        },
-        {
-          query: GET_EVENT_FECHA, // Segunda consulta que deseas refrescar
-          variables: {
-            start: dateInfo, // Asegúrate de incluir las mismas variables que usaste en la consulta original
-          },
-        },
-      ],
-    });
+    useMutation(COMPLETAR_EVENT);
 
   const handleChange = ({ target: { name, value } }) => {
     if (mode == "R") {
@@ -196,6 +137,17 @@ function EventMode({
           mensajeReprogramado: reprogramar.mensaje_reprogramado,
           status: reprogramar.status,
         },
+        refetchQueries: [
+          {
+            query: GET_EVENTS,
+          },
+          {
+            query: GET_EVENT_FECHA, // Segunda consulta que deseas refrescar
+            variables: {
+              start: dateInfo, // Asegúrate de incluir las mismas variables que usaste en la consulta original
+            },
+          },
+        ],
       });
       toast.success("Mantenimiento Reprogramado para " + reprogramar.start);
     } else if (mode == "E") {
@@ -216,6 +168,17 @@ function EventMode({
           status: ejecutar.status,
           tecnicoId: tecnicoId,
         },
+        refetchQueries: [
+          {
+            query: GET_EVENTS,
+          },
+          {
+            query: GET_EVENT_FECHA, // Segunda consulta que deseas refrescar
+            variables: {
+              start: dateInfo, // Asegúrate de incluir las mismas variables que usaste en la consulta original
+            },
+          },
+        ],
       });
       toast.success("Mantenimiento en ejecucion");
     } else if (mode == "C") {
@@ -225,6 +188,17 @@ function EventMode({
           id: completar.eventId,
           status: completar.status,
         },
+        refetchQueries: [
+          {
+            query: GET_EVENTS,
+          },
+          {
+            query: GET_EVENT_FECHA, // Segunda consulta que deseas refrescar
+            variables: {
+              start: dateInfo, // Asegúrate de incluir las mismas variables que usaste en la consulta original
+            },
+          },
+        ],
       });
       loadingCerrarWorkOrder;
       await cerrarWorkOrder({

@@ -1,5 +1,8 @@
 import React from "react";
 import {
+  BiAward,
+  BiBarcode,
+  BiBookBookmark,
   BiDotsHorizontalRounded,
   BiSolidEditLocation,
   BiSolidEnvelope,
@@ -17,7 +20,7 @@ function MaquinaCard({ maquina }) {
           <div className="flex flex-col items-start w-4/5">
             <h2 className="font-bold text-lg">{maquina.maquina_name}</h2>
             <span className="bg-green-100 text-sm text-green-950 p-1 rounded-lg">
-              Locacion Maquina
+              {maquina.maquina_location.location_name}
             </span>
           </div>
           <div className="flex items-start justify-start top-6 h-full">
@@ -26,17 +29,32 @@ function MaquinaCard({ maquina }) {
         </div>
         {/* CONTENT BODY */}
         <div className="flex flex-col justify-start items-start mt-4">
-          <div className="flex justify-center items-center p-1">
-            <BiSolidPhone className="text-blue-600 text-xl mr-2 mb-4" />
-            <p className="mb-4">Ultimo Mantenimiento</p>
+          <div className="flex justify-start items-center p-2 bg-gray-100 w-full rounded-md mb-2">
+            <BiAward className="text-dark-purple text-3xl mr-2" />
+            <div className="flex flex-col">
+              <span className="font-bold text-center">
+                Modelo de la maquina
+              </span>
+              <p>{maquina.maquina_modelo}</p>
+            </div>
           </div>
-          <div className="flex justify-center items-center p-1">
-            <BiSolidEnvelope className="text-blue-600 text-xl mr-2 mb-4" />
-            <p className="mb-4">Proximo Mantenimiento</p>
+          <div className="flex justify-start items-center p-2 bg-gray-100 w-full rounded-md mb-2">
+            <BiBarcode className="text-dark-purple text-3xl mr-2" />
+            <div className="flex flex-col">
+              <span className="font-bold text-center">Número de Serial</span>
+              <p>{maquina.numero_serial}</p>
+            </div>
           </div>
-          <div className="flex justify-center items-center p-1">
-            <BiSolidEditLocation className="text-blue-600 text-xl mr-2 mb-4" />
-            <p className="mb-4">Status</p>
+          <div className="flex justify-start items-center p-2 bg-gray-100 w-full rounded-md mb-2">
+            <BiBookBookmark className="text-dark-purple text-3xl mr-2" />
+            <div className="flex flex-col">
+              <span className="font-bold">Ultimo Mantenimiento</span>
+              <p>
+                {maquina.ultimo_mantenimiento
+                  ? maquina.ultimo_mantenimiento
+                  : "Aun no se completan mantenimientos"}
+              </p>
+            </div>
           </div>
         </div>
         {/* FOOTER CARD */}
