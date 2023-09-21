@@ -10,6 +10,7 @@ import { historialTypeDefs, historialResolver } from "./Historial/historial.js";
 import { groupTypeDefs } from "./Group/group.js";
 import { dayTypeDefs, dayResolver } from "./Day/day.js";
 import { workOrderTypeDefs, workOrderResolver } from "./WorkOrder/WorkOrder.js";
+import { dayEventsTypeDefs } from "./DayEvent/dayEvent.js";
 
 const rootTypeDefs = gql`
   type Query {
@@ -31,6 +32,7 @@ export const resolver = [
   historialResolver,
   workOrderResolver,
   dayResolver,
+  eventResolver,
 ];
 
 export const typeDefs = [
@@ -46,4 +48,5 @@ export const typeDefs = [
   groupTypeDefs,
   dayTypeDefs,
   workOrderTypeDefs,
+  dayEventsTypeDefs,
 ];

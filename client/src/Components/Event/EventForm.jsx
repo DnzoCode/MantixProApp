@@ -4,7 +4,11 @@ import Select from "react-select";
 import { GET_TECNICOS } from "../../graphql/Tecnico/TecnicoQl";
 import LoadComponent from "../LoadComponent/LoadComponent";
 import { GET_MAQUINAS } from "../../graphql/Maquina/MaquinaQl";
-import { CREATE_EVENTS, GET_EVENTS } from "../../graphql/Event/EventQl";
+import {
+  CREATE_EVENTS,
+  GET_EVENTS,
+  GET_EVENT_FECHA,
+} from "../../graphql/Event/EventQl";
 import { toast } from "sonner";
 import {
   BiBrightness,
@@ -13,6 +17,7 @@ import {
   BiAlarmAdd,
   BiAlarmOff,
 } from "react-icons/bi";
+import { REGISTER_DAY } from "../../graphql/Day/DayQl";
 function EventForm() {
   const {
     data: dataTecnicos,
@@ -38,13 +43,12 @@ function EventForm() {
   const [selectedOptionMaquina, setSelectedOptionMaquina] = useState(null);
   const [selectedOptionTecnico, setSelectedOptionTecnico] = useState(null);
 
-  const [createEvent, { loading, error }] = useMutation(CREATE_EVENTS, {
-    refetchQueries: [
-      {
-        query: GET_EVENTS,
-      },
-    ],
-  });
+  const [createEvent, { loading, error }] = useMutation(CREATE_EVENTS);
+  const [
+    createDay,
+    { loading: loadingRegisterDay, error: errorLoadingRegisterDay },
+  ] = useMutation(REGISTER_DAY);
+
   const listTecnicos = dataTecnicos?.tecnicos.map((tecnico) => {
     return {
       value: tecnico._id,
@@ -76,6 +80,12 @@ function EventForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    await createDay({
+      variables: {
+        date: new Date(event.start),
+        isClosed: false,
+      },
+    });
     await createEvent({
       variables: {
         start: new Date(event.start),
@@ -88,6 +98,17 @@ function EventForm() {
         mensajeReprogramado: event.mensajeReprogramado,
         titulo: "Mantenimiento",
       },
+      refetchQueries: [
+        {
+          query: GET_EVENTS,
+        },
+        {
+          query: GET_EVENT_FECHA, // Segunda consulta que deseas refrescar
+          variables: {
+            start: event.start, // Asegúrate de incluir las mismas variables que usaste en la consulta original
+          },
+        },
+      ],
     });
     toast.success("Event has been created");
     const newEvent = {

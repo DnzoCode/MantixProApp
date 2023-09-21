@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BiCaretDown, BiSolidHandLeft } from "react-icons/bi";
 import EventMode from "./EventMode";
-function EventCard({ eventInfo, dateString, refetchData }) {
+function EventCard({ eventInfo, dateString, refetchData, allCompleted }) {
   const [openDialog, setOpenDialog] = useState({});
   const [mode, setMode] = useState("");
   const [openFunction, setOpenFunction] = useState(false);
@@ -29,116 +29,133 @@ function EventCard({ eventInfo, dateString, refetchData }) {
   };
   return (
     <>
-      <div className="w-full bg-white shadow-lg rounded-xl flex flex-col items-center h-auto border-2">
-        <div
-          className={`w-full flex justify-evenly items-center px-2 py-1 cursor-pointer rounded-tl-lg rounded-tr-lg ${
-            eventInfo.status == "Programado"
-              ? statusColors.gray
-              : eventInfo.status == "Reprogramado"
-              ? statusColors.yellow
-              : eventInfo.status == "En ejecucion"
-              ? statusColors.blue
-              : eventInfo.status == "Completado"
-              ? statusColors.green
-              : "bg-white"
-          }`}
-          onClick={() => handleOpenDialog(eventInfo._id)}
+      <div className="flex justify-between mb-8 px-12">
+        <h1 className="font-extrabold text-3xl">{dateString}</h1>
+
+        <button
+          className="bg-green-400 rounded-lg text-white p-2 disabled:bg-green-200"
+          disabled={allCompleted}
         >
-          <span
-            className={`font-semibold ${
-              openDialog[eventInfo._id] ? "hidden" : "block"
-            }`}
-          >
-            {eventInfo.maquina?.maquina_name}
-          </span>
-          <span>{eventInfo.status}</span>
+          Cerrar Dia
+        </button>
+      </div>
+      <div className="w-full grid grid-cols-2 gap-4 px-4  h-auto">
+        {eventInfo?.eventPorFecha?.map((event, index) => (
           <div
-            className={` ${
-              openDialog[eventInfo._id]
-                ? "flex flex-row items-center justify-between"
-                : "flex flex-col"
-            }`}
+            className="w-full bg-white shadow-lg rounded-xl flex flex-col items-center h-auto border-2"
+            key={index}
           >
-            <span className="text-left text-sm ">Turno</span>
-            <span className="font-extrabold text-2xl text-right ml-2">
-              {eventInfo.turno}
-            </span>
-          </div>
-          <BiCaretDown
-            className={`text-2xl duration-150 ${
-              openDialog[eventInfo._id] ? "rotate-180" : "rotate-0"
-            }`}
-          />
-        </div>
-        <div
-          className={`w-full justify-evenly  ${
-            openDialog[eventInfo._id] ? "flex flex-col p-4" : "hidden "
-          }`}
-        >
-          <div className="w-full flex justify-center mb-4">
-            <span className="font-extrabold text-xl">
-              {eventInfo.maquina?.maquina_name}
-            </span>
-          </div>
-          <div className="w-full flex justify-evenly">
-            <span className="font-extrabold">
-              {eventInfo.tecnico_id?.tecnico_name}{" "}
-              {eventInfo.tecnico_id?.tecnico_apellido}
-            </span>
-            <span className="font-extrabold bg-green-300 p-1 rounded-lg">
-              {eventInfo.maquina?.maquina_location.location_name}
-            </span>
-          </div>
-          <div className="w-full flex justify-evenly my-4">
-            {eventInfo.status != "Completado" && (
-              <button
-                className="bg-yellow-300 w-1/2 mt-4 p-2 mx-2 rounded-md"
-                onClick={() => {
-                  handleChangeMode("R");
-                }}
+            <div
+              className={`w-full flex justify-evenly items-center px-2 py-1 cursor-pointer rounded-tl-lg rounded-tr-lg ${
+                event.status == "Programado"
+                  ? statusColors.gray
+                  : event.status == "Reprogramado"
+                  ? statusColors.yellow
+                  : event.status == "En ejecucion"
+                  ? statusColors.blue
+                  : event.status == "Completado"
+                  ? statusColors.green
+                  : "bg-white"
+              }`}
+              onClick={() => handleOpenDialog(event._id)}
+            >
+              <span
+                className={`font-semibold ${
+                  openDialog[event._id] ? "hidden" : "block"
+                }`}
               >
-                Reprogramar
-              </button>
-            )}
-            {eventInfo.status != "En ejecucion" &&
-              eventInfo.status != "Completado" && (
-                <button
-                  className="bg-blue-600 w-1/2 mt-4 p-2 mx-2 rounded-md text-white"
-                  onClick={() => {
-                    handleChangeMode("E");
-                  }}
-                >
-                  Ejecutar
-                </button>
+                {event.maquina?.maquina_name}
+              </span>
+              <span>{event.status}</span>
+              <div
+                className={` ${
+                  openDialog[event._id]
+                    ? "flex flex-row items-center justify-between"
+                    : "flex flex-col"
+                }`}
+              >
+                <span className="text-left text-sm ">Turno</span>
+                <span className="font-extrabold text-2xl text-right ml-2">
+                  {event.turno}
+                </span>
+              </div>
+              <BiCaretDown
+                className={`text-2xl duration-150 ${
+                  openDialog[event._id] ? "rotate-180" : "rotate-0"
+                }`}
+              />
+            </div>
+            <div
+              className={`w-full justify-evenly  ${
+                openDialog[event._id] ? "flex flex-col p-4" : "hidden "
+              }`}
+            >
+              <div className="w-full flex justify-center mb-4">
+                <span className="font-extrabold text-xl">
+                  {event.maquina?.maquina_name}
+                </span>
+              </div>
+              <div className="w-full flex justify-evenly">
+                <span className="font-extrabold">
+                  {event.tecnico_id?.tecnico_name}{" "}
+                  {event.tecnico_id?.tecnico_apellido}
+                </span>
+                <span className="font-extrabold bg-green-300 p-1 rounded-lg">
+                  {event.maquina?.maquina_location.location_name}
+                </span>
+              </div>
+              <div className="w-full flex justify-evenly my-4">
+                {event.status != "Completado" && (
+                  <button
+                    className="bg-yellow-300 w-1/2 mt-4 p-2 mx-2 rounded-md"
+                    onClick={() => {
+                      handleChangeMode("R");
+                    }}
+                  >
+                    Reprogramar
+                  </button>
+                )}
+                {event.status != "En ejecucion" &&
+                  event.status != "Completado" && (
+                    <button
+                      className="bg-blue-600 w-1/2 mt-4 p-2 mx-2 rounded-md text-white"
+                      onClick={() => {
+                        handleChangeMode("E");
+                      }}
+                    >
+                      Ejecutar
+                    </button>
+                  )}
+                {event.status != "Programado" &&
+                  event.status != "Completado" &&
+                  event.status != "Reprogramado" && (
+                    <button
+                      className="bg-green-400 w-1/2 mt-4 p-2 mx-2 rounded-md text-white"
+                      onClick={() => {
+                        handleChangeMode("C");
+                      }}
+                    >
+                      Completar
+                    </button>
+                  )}
+              </div>
+              {mode ? (
+                <EventMode
+                  mode={mode}
+                  open={openFunction}
+                  eventId={event._id}
+                  tecnicoId={event.tecnico_id?._id}
+                  dateInfo={dateString}
+                  refetchData={refetchData}
+                  ejecucion={event.ejecucion}
+                  estadoEvent={event.status}
+                />
+              ) : (
+                <></>
               )}
-            {eventInfo.status != "Programado" &&
-              eventInfo.status != "Completado" &&
-              eventInfo.status != "Reprogramado" && (
-                <button
-                  className="bg-green-400 w-1/2 mt-4 p-2 mx-2 rounded-md text-white"
-                  onClick={() => {
-                    handleChangeMode("C");
-                  }}
-                >
-                  Completar
-                </button>
-              )}
+            </div>
           </div>
-          {mode ? (
-            <EventMode
-              mode={mode}
-              open={openFunction}
-              eventId={eventInfo._id}
-              tecnicoId={eventInfo.tecnico_id?._id}
-              dateInfo={dateString}
-              refetchData={refetchData}
-              ejecucion={eventInfo.ejecucion}
-              estadoEvent={eventInfo.status}
-            />
-          ) : (
-            <></>
-          )}
-        </div>
+        ))}
       </div>
     </>
   );
