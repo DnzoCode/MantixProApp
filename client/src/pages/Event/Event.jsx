@@ -33,9 +33,17 @@ export default function Event() {
             </button>
           </div>
         </div>
+        <div className="w-auto flex justify-center items-center mb-4">
+          <h1 className="font-bold text-3xl">
+            PROGRAMA MANTENIMIENTO PREVENTIVO DE EQUIPOS{" "}
+          </h1>
+          <span className="bg-white p-2 text-2xl ml-2 rounded-md shadow-sm">
+            {new Date().getFullYear()}
+          </span>
+        </div>
         <div className="flex flex-col justify-stretch items-center w-full h-full">
           <div className="bg-white rounded-lg shadow-xl p-4">
-            <Calendar data={data} />
+            <Calendar data={data} loading={loading} />
           </div>
         </div>
       </Layout>

@@ -1,25 +1,24 @@
 import React, { useState } from "react";
 import Layout from "../../Components/Global/Layout";
-import Modal from "../../Components/Global/Modal/Modal";
 import { BiListUl, BiPlus, BiSolidGrid } from "react-icons/bi";
-import MaquinaCard from "../../Components/Maquina/MaquinaCard";
-import { GET_MAQUINAS } from "../../graphql/Maquina/MaquinaQl";
 import { useQuery } from "@apollo/client";
-import MaquinaForm from "../../Components/Maquina/MaquinaForm";
-function Maquina() {
+import { GET_TECNICOS } from "../../graphql/Tecnico/TecnicoQl";
+import TecnicoCard from "../../Components/Tecnico/TecnicoCard";
+import Modal from "../../Components/Global/Modal/Modal";
+import TecnicoForm from "../../Components/Tecnico/TecnicoForm";
+function Tecnico() {
   const [openModal, setOpenModal] = useState(false);
-  const { data, loading, error } = useQuery(GET_MAQUINAS);
+  const { data, loading, error } = useQuery(GET_TECNICOS);
   return (
     <>
-      <Layout loading={loading}>
+      <Layout>
         <Modal
           setOpenModal={setOpenModal}
           isOpen={openModal}
-          title={"Registrar Maquina"}
+          title={"Registrar Tecnico"}
         >
-          <MaquinaForm />
+          <TecnicoForm />
         </Modal>
-
         <div className="flex justify-between items-center p-4">
           <div></div>
           <div className="flex items-center">
@@ -34,13 +33,13 @@ function Maquina() {
               onClick={() => setOpenModal(true)}
             >
               <BiPlus className="text-xl" />
-              Agregar Maquina
+              Agregar Tecnico
             </button>
           </div>
         </div>
         <div className="grid grid-cols-4 grid-rows-2 gap-4">
-          {data?.maquinas?.map((maquina, index) => (
-            <MaquinaCard key={index} maquina={maquina} />
+          {data?.tecnicos?.map((tecnico, index) => (
+            <TecnicoCard key={index} tecnico={tecnico} />
           ))}
         </div>
       </Layout>
@@ -48,4 +47,4 @@ function Maquina() {
   );
 }
 
-export default Maquina;
+export default Tecnico;

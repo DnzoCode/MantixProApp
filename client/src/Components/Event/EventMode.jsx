@@ -141,12 +141,6 @@ function EventMode({
           {
             query: GET_EVENTS,
           },
-          {
-            query: GET_EVENT_FECHA, // Segunda consulta que deseas refrescar
-            variables: {
-              start: dateInfo, // Asegúrate de incluir las mismas variables que usaste en la consulta original
-            },
-          },
         ],
       });
       toast.success("Mantenimiento Reprogramado para " + reprogramar.start);
@@ -172,12 +166,6 @@ function EventMode({
           {
             query: GET_EVENTS,
           },
-          {
-            query: GET_EVENT_FECHA, // Segunda consulta que deseas refrescar
-            variables: {
-              start: dateInfo, // Asegúrate de incluir las mismas variables que usaste en la consulta original
-            },
-          },
         ],
       });
       toast.success("Mantenimiento en ejecucion");
@@ -191,12 +179,6 @@ function EventMode({
         refetchQueries: [
           {
             query: GET_EVENTS,
-          },
-          {
-            query: GET_EVENT_FECHA, // Segunda consulta que deseas refrescar
-            variables: {
-              start: dateInfo, // Asegúrate de incluir las mismas variables que usaste en la consulta original
-            },
           },
         ],
       });

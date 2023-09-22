@@ -9,21 +9,12 @@ import EventCard from "../Event/EventCard";
 import LoadComponent from "../LoadComponent/LoadComponent";
 import { GET_EVENT_FECHA } from "../../graphql/Event/EventQl";
 import { useQuery } from "@apollo/client";
-export default function Calendar({ data }) {
+import moment from "moment/moment";
+
+export default function Calendar({ data, loading }) {
   const [openModal, setOpenModal] = useState(false);
   const [dateInfo, setDateInfo] = useState([]);
   const [allEventsCompleted, setAllEventsCompleted] = useState(false);
-  const {
-    data: dataEvent,
-    loading,
-    error,
-    refetch,
-  } = useQuery(GET_EVENT_FECHA, {
-    variables: {
-      start: dateInfo?.dateStr || null,
-    },
-  });
-
   return (
     <>
       <FullCalendar
@@ -65,7 +56,7 @@ export default function Calendar({ data }) {
             <LoadComponent />
           ) : (
             <>
-              {dataEvent?.eventPorFecha?.length == 0 ? (
+              {data.events?.length == 0 || data.events == undefined ? (
                 <div className="w-full h-full flex justify-center items-center">
                   <p className="font-bold">
                     No hay mantenimientos para esta fecha
@@ -73,14 +64,12 @@ export default function Calendar({ data }) {
                 </div>
               ) : (
                 <EventCard
-                  eventData={dataEvent}
+                  eventData={data.events.filter(
+                    (event) =>
+                      moment(event.start).utc().format("YYYY-MM-DD") ==
+                      moment(dateInfo.dateStr).utc().format("YYYY-MM-DD")
+                  )}
                   dateString={dateInfo.dateStr}
-                  refetchData={refetch}
-                  allCompleted={
-                    !dataEvent?.eventPorFecha?.every(
-                      (event) => event.status === "Completado"
-                    )
-                  }
                 />
               )}
             </>

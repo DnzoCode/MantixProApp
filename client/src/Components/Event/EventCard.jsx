@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { BiCaretDown, BiSolidHandLeft } from "react-icons/bi";
 import EventMode from "./EventMode";
-function EventCard({ eventInfo, dateString, refetchData, allCompleted }) {
+function EventCard({ eventData, dateString, refetchData }) {
   const [openDialog, setOpenDialog] = useState({});
   const [mode, setMode] = useState("");
   const [openFunction, setOpenFunction] = useState(false);
-
+  console.log(eventData);
   const handleOpenDialog = (eventId) => {
     setOpenDialog((prevState) => ({
       ...prevState,
@@ -27,6 +27,33 @@ function EventCard({ eventInfo, dateString, refetchData, allCompleted }) {
       : setMode("C");
     openFunction ? setOpenFunction(false) : setOpenFunction(true);
   };
+
+  const eventosTurnoA = [];
+  const eventosTurnoB = [];
+  const eventosTurnoK = [];
+
+  // Clasifica los eventos en los arrays correspondientes según el turno.
+  eventData.forEach((event) => {
+    if (event.turno == "A") {
+      eventosTurnoA.push(event);
+    } else if (event.turno == "B") {
+      eventosTurnoB.push(event);
+    } else if (event.turno == "K") {
+      eventosTurnoK.push(event);
+    }
+  });
+
+  // Luego, mapea los eventos en el orden deseado (A, B y K).
+  const eventosOrdenados = [
+    ...eventosTurnoA,
+    ...eventosTurnoB,
+    ...eventosTurnoK,
+  ];
+
+  const allEventCompleted = !eventosOrdenados?.every(
+    (event) => event.status == "Completado"
+  );
+
   return (
     <>
       <div className="flex justify-between mb-8 px-12">
@@ -34,13 +61,13 @@ function EventCard({ eventInfo, dateString, refetchData, allCompleted }) {
 
         <button
           className="bg-green-400 rounded-lg text-white p-2 disabled:bg-green-200"
-          disabled={allCompleted}
+          disabled={allEventCompleted}
         >
           Cerrar Dia
         </button>
       </div>
       <div className="w-full grid grid-cols-2 gap-4 px-4  h-auto">
-        {eventInfo?.eventPorFecha?.map((event, index) => (
+        {eventosOrdenados?.map((event, index) => (
           <div
             className="w-full bg-white shadow-lg rounded-xl flex flex-col items-center h-auto border-2"
             key={index}

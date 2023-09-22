@@ -23,9 +23,6 @@ function MaquinaCard({ maquina }) {
               {maquina.maquina_location.location_name}
             </span>
           </div>
-          <div className="flex items-start justify-start top-6 h-full">
-            <BiDotsHorizontalRounded className="text-xl cursor-pointer hover:bg-slate-200 hover:rounded-lg duration-100" />
-          </div>
         </div>
         {/* CONTENT BODY */}
         <div className="flex flex-col justify-start items-start mt-4">

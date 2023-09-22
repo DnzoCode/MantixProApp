@@ -50,6 +50,10 @@ export const dayResolver = {
   },
   Mutation: {
     createDay: async (_, { date, isClosed }) => {
+      const existingDay = await Day.findOne({ date });
+      if (existingDay) {
+        return;
+      }
       const day = new Day({
         date,
         isClosed,

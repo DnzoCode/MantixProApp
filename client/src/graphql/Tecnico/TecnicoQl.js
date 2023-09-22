@@ -9,3 +9,15 @@ export const GET_TECNICOS = gql`
     }
   }
 `;
+export const CREATE_TECNICO = gql`
+  mutation ($tecnicoName: String, $tecnicoApellido: String) {
+    createTecnico(
+      tecnico_name: $tecnicoName
+      tecnico_apellido: $tecnicoApellido
+    ) {
+      _id
+      tecnico_apellido
+      tecnico_name
+    }
+  }
+`;

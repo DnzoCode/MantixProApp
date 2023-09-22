@@ -6,6 +6,7 @@ import { baseUrl } from "./composables/useConfig";
 import Maintenance from "./pages/Maintenance/Maintenance";
 import Login from "./pages/auth/Login/Login";
 import Maquina from "./pages/Maquina/Maquina";
+import Tecnico from "./pages/Tecnico/Tecnico";
 
 const client = new ApolloClient({
   uri: baseUrl,
@@ -24,6 +25,7 @@ export default function App() {
             <Route path="/maintenance/add" element={<Maintenance />} />
             <Route path="/login" element={<Login />} />
             <Route path="/maquinas" element={<Maquina />} />
+            <Route path="/tecnicos" element={<Tecnico />} />
           </Routes>
         </BrowserRouter>
       </ApolloProvider>

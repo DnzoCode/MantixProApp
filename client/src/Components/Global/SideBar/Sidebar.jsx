@@ -27,12 +27,6 @@ export default function Sidebar() {
       to: "/maintenance/add",
     },
     {
-      icon: <BiSolidGroup className="text-2xl mr-2" />,
-      title: "Usuarios",
-      active: false,
-      to: "/users",
-    },
-    {
       icon: <BiSolidBox className="text-2xl mr-2" />,
       title: "Maquinas",
       active: false,
