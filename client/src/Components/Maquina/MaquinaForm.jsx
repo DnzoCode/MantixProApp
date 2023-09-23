@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { GET_LOCATIONS } from "../../graphql/Location/Location";
+import { GET_LOCATIONS } from "../../graphql/Location/LocationQl";
 import { useMutation, useQuery } from "@apollo/client";
 import Select from "react-select";
 import { CREATE_MAQUINA, GET_MAQUINAS } from "../../graphql/Maquina/MaquinaQl";
