@@ -1,27 +1,28 @@
 import React, { useState } from "react";
+import Location from "../Location/Location";
 import Layout from "../../Components/Global/Layout";
+import Modal from "../../Components/Global/Modal/Modal";
 import { BiListUl, BiPlus, BiSolidGrid } from "react-icons/bi";
 import { useQuery } from "@apollo/client";
-import { GET_TECNICOS } from "../../graphql/Tecnico/TecnicoQl";
-import TecnicoCard from "../../Components/Tecnico/TecnicoCard";
-import Modal from "../../Components/Global/Modal/Modal";
-import TecnicoForm from "../../Components/Tecnico/TecnicoForm";
-function Tecnico() {
+import { GET_OWNERS } from "../../graphql/Owners/OwnerQl";
+import OwnerForm from "../../Components/Owner/OwnerForm";
+import OwnerCard from "../../Components/Owner/OwnerCard";
+
+function Owner() {
   const [openModal, setOpenModal] = useState(false);
-  const { data, loading, error } = useQuery(GET_TECNICOS);
+  const { data, loading, error } = useQuery(GET_OWNERS);
   return (
     <>
       <Layout loading={loading}>
         <Modal
           setOpenModal={setOpenModal}
           isOpen={openModal}
-          title={"Registrar Tecnico"}
+          title={"Registrar Encargado"}
         >
-          <TecnicoForm />
+          <OwnerForm />
         </Modal>
         <div className="flex justify-between items-center p-4">
           <div></div>
-
           <div className="flex items-center">
             <button className="mr-4 p-2 rounded-lg flex items-center">
               <BiListUl />
@@ -34,13 +35,13 @@ function Tecnico() {
               onClick={() => setOpenModal(true)}
             >
               <BiPlus className="text-xl" />
-              Agregar Tecnico
+              Agregar Locacion
             </button>
           </div>
         </div>
         <div className="grid grid-cols-4 grid-rows-2 gap-4">
-          {data?.tecnicos?.map((tecnico, index) => (
-            <TecnicoCard key={index} tecnico={tecnico} />
+          {data?.owners?.map((owner, index) => (
+            <OwnerCard key={index} owner={owner} />
           ))}
         </div>
       </Layout>
@@ -48,4 +49,4 @@ function Tecnico() {
   );
 }
 
-export default Tecnico;
+export default Owner;

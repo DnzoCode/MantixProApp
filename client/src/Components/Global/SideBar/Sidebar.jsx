@@ -7,6 +7,8 @@ import {
   BiSolidGroup,
   BiSolidBox,
   BiSolidUserBadge,
+  BiPodcast,
+  BiAward,
 } from "react-icons/bi";
 import { Link, useLocation } from "react-router-dom";
 export default function Sidebar() {
@@ -37,6 +39,18 @@ export default function Sidebar() {
       title: "Tecnicos",
       active: false,
       to: "/tecnicos",
+    },
+    {
+      icon: <BiPodcast className="text-2xl mr-2" />,
+      title: "Locaciones",
+      active: false,
+      to: "/locations",
+    },
+    {
+      icon: <BiAward className="text-2xl mr-2" />,
+      title: "Dueño de Proceso",
+      active: false,
+      to: "/owners",
     },
   ];
 

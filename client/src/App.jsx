@@ -7,6 +7,8 @@ import Maintenance from "./pages/Maintenance/Maintenance";
 import Login from "./pages/auth/Login/Login";
 import Maquina from "./pages/Maquina/Maquina";
 import Tecnico from "./pages/Tecnico/Tecnico";
+import Location from "./pages/Location/Location";
+import Owner from "./pages/Owner/Owner";
 
 const client = new ApolloClient({
   uri: baseUrl,
@@ -26,6 +28,8 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/maquinas" element={<Maquina />} />
             <Route path="/tecnicos" element={<Tecnico />} />
+            <Route path="/locations" element={<Location />} />
+            <Route path="/owners" element={<Owner />} />
           </Routes>
         </BrowserRouter>
       </ApolloProvider>

@@ -1,27 +1,27 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Layout from "../../Components/Global/Layout";
 import { BiListUl, BiPlus, BiSolidGrid } from "react-icons/bi";
+import { GET_LOCATIONS } from "../../graphql/Location/LocationQl";
 import { useQuery } from "@apollo/client";
-import { GET_TECNICOS } from "../../graphql/Tecnico/TecnicoQl";
-import TecnicoCard from "../../Components/Tecnico/TecnicoCard";
+import LocationCard from "../../Components/Location/LocationCard";
 import Modal from "../../Components/Global/Modal/Modal";
-import TecnicoForm from "../../Components/Tecnico/TecnicoForm";
-function Tecnico() {
+import LocationForm from "../../Components/Location/LocationForm";
+
+function Location() {
   const [openModal, setOpenModal] = useState(false);
-  const { data, loading, error } = useQuery(GET_TECNICOS);
+  const { data, loading, error } = useQuery(GET_LOCATIONS);
   return (
     <>
       <Layout loading={loading}>
         <Modal
           setOpenModal={setOpenModal}
           isOpen={openModal}
-          title={"Registrar Tecnico"}
+          title={"Registrar Locacion"}
         >
-          <TecnicoForm />
+          <LocationForm />
         </Modal>
         <div className="flex justify-between items-center p-4">
           <div></div>
-
           <div className="flex items-center">
             <button className="mr-4 p-2 rounded-lg flex items-center">
               <BiListUl />
@@ -34,13 +34,13 @@ function Tecnico() {
               onClick={() => setOpenModal(true)}
             >
               <BiPlus className="text-xl" />
-              Agregar Tecnico
+              Agregar Locacion
             </button>
           </div>
         </div>
         <div className="grid grid-cols-4 grid-rows-2 gap-4">
-          {data?.tecnicos?.map((tecnico, index) => (
-            <TecnicoCard key={index} tecnico={tecnico} />
+          {data?.locations?.map((location, index) => (
+            <LocationCard key={index} location={location} />
           ))}
         </div>
       </Layout>
@@ -48,4 +48,4 @@ function Tecnico() {
   );
 }
 
-export default Tecnico;
+export default Location;
