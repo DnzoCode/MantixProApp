@@ -28,6 +28,7 @@ export const locationTypeDefs = gql`
   extend type Query {
     locations: [Location]
     location(_id: ID!): Location
+    locationByName(location_name: String!): Location
   }
   extend type Mutation {
     createLocation(location_name: String!): Location
@@ -45,6 +46,19 @@ export const locationResolver = {
   Query: {
     locations: async () => await Location.find(),
     location: async (_, { _id }) => await Location.findById(_id),
+    locationByName: async (_, { location_name }) => {
+      // Convierte location_name a mayúsculas
+      const uppercaseLocationName = location_name.toUpperCase();
+
+      const location = await Location.findOne({
+        location_name: uppercaseLocationName,
+      });
+
+      if (!location) {
+        throw new Error("No se encontró la ubicación " + location_name);
+      }
+      return location;
+    },
   },
   Mutation: {
     createLocation: async (_, { location_name }) => {

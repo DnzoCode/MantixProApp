@@ -69,6 +69,7 @@ export const eventTypeDefs = gql`
       turno: String
       mensaje_reprogramado: String
     ): Event
+    eventTec(_id: ID!, tecnico_id: ID): Event
   }
   type Event {
     _id: ID
@@ -168,6 +169,13 @@ export const eventResolver = {
       });
       if (!ejecutar) throw new Error("Mantenimiento no encontrado");
       return ejecutar;
+    },
+    eventTec: async (_, { _id, tecnico_id }) => {
+      const event = await Event.findByIdAndUpdate(_id, {
+        tecnico_id,
+      });
+      if (!event) throw new Error("Mantenimiento no encontrado");
+      return event;
     },
     updateEvent: async (
       _,

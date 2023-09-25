@@ -5,7 +5,6 @@ const maquinaSchema = new Schema(
     maquina_name: {
       type: String,
       trim: true,
-      unique: true,
       require: true,
     },
     maquina_modelo: {
@@ -15,7 +14,6 @@ const maquinaSchema = new Schema(
     numero_serial: {
       type: String,
       trim: true,
-      unique: true,
     },
     maquina_location: {
       type: Schema.Types.ObjectId,

@@ -20,7 +20,7 @@ function MaquinaCard({ maquina }) {
           <div className="flex flex-col items-start w-4/5">
             <h2 className="font-bold text-lg">{maquina.maquina_name}</h2>
             <span className="bg-green-100 text-sm text-green-950 p-1 rounded-lg">
-              {maquina.maquina_location.location_name}
+              {maquina.maquina_location?.location_name}
             </span>
           </div>
         </div>

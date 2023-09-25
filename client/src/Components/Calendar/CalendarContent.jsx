@@ -28,10 +28,10 @@ function CalendarContent({ eventInfo }) {
         <div className="overflow-auto w-full flex flex-col justify-center items-center">
           <div className="flex flex-col justify-center items-center border-b-2 w-full mb-2">
             <span className="whitespace-normal font-bold text-center">
-              {maquina.maquina_name}
+              {maquina?.maquina_name}
             </span>
             <span className="bg-slate-700 p-1 rounded-md text-white mb-2">
-              {maquina.maquina_location.location_name}
+              {maquina?.maquina_location.location_name}
             </span>
           </div>
           <div className="w-full flex flex-col justify-end items-start">

@@ -177,3 +177,14 @@ export const COMPLETAR_EVENT = gql`
     }
   }
 `;
+export const EVENT_TEC = gql`
+  mutation ($id: ID!, $tecnicoId: ID) {
+    eventTec(_id: $id, tecnico_id: $tecnicoId) {
+      _id
+      tecnico_id {
+        _id
+        tecnico_name
+      }
+    }
+  }
+`;

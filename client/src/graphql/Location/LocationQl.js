@@ -17,3 +17,12 @@ export const CREATE_LOCATION = gql`
     }
   }
 `;
+
+export const GET_LOCATION_BY_NAME = gql`
+  query ($locationName: String!) {
+    locationByName(location_name: $locationName) {
+      _id
+      location_name
+    }
+  }
+`;

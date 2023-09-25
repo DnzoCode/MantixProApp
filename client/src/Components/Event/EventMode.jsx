@@ -3,6 +3,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import {
   COMPLETAR_EVENT,
   EJECUTAR_EVENT,
+  EVENT_TEC,
   GET_EVENTS,
   GET_EVENT_FECHA,
   REPROGRAMAR_EVENT,
@@ -15,6 +16,7 @@ import {
 } from "../../graphql/WorkOrder/WorkOrder";
 import { GET_OWNERS } from "../../graphql/Owners/OwnerQl";
 import Select from "react-select";
+import { GET_TECNICOS } from "../../graphql/Tecnico/TecnicoQl";
 
 //border-yellow-200
 function EventMode({
@@ -39,7 +41,19 @@ function EventMode({
     loading: loadingOwners,
     error: errorOwners,
   } = useQuery(GET_OWNERS);
+  const {
+    data: dataTecnicos,
+    loading: loadingTecnicos,
+    error: errorTecnicos,
+  } = useQuery(GET_TECNICOS);
 
+  const listTecnicos = dataTecnicos?.tecnicos.map((tecnico) => {
+    return {
+      value: tecnico._id,
+      label: `${tecnico.tecnico_name} ${tecnico.tecnico_apellido}`,
+    };
+  });
+  const [selectedOptionTecnico, setSelectedOptionTecnico] = useState(null);
   var fechaActual = new Date();
   var hora = fechaActual.getHours();
   var minutos = fechaActual.getMinutes();
@@ -64,7 +78,13 @@ function EventMode({
     hora_inicio: horaFormateada,
     diagnostico: "",
     trabajo_realizado: "",
+    tecnicoId: "",
   });
+
+  const handleSelectChangeTec = (selected, selectNumber) => {
+    setSelectedOptionTecnico(selected);
+    setEjecutar({ ...ejecutar, tecnicoId: selected.value });
+  };
 
   const [completar, setCompletar] = useState({
     eventId: eventId,
@@ -105,6 +125,8 @@ function EventMode({
 
   const [completarEvent, { loading: loadingCompletar, error: errorCompletar }] =
     useMutation(COMPLETAR_EVENT);
+  const [eventTec, { loading: loadingEventTec, error: errorEventTec }] =
+    useMutation(EVENT_TEC);
 
   const handleChange = ({ target: { name, value } }) => {
     if (mode == "R") {
@@ -155,6 +177,12 @@ function EventMode({
           trabajoRealizado: ejecutar.trabajo_realizado,
         },
       });
+      await eventTec({
+        variables: {
+          id: ejecutar.event_id,
+          tecnicoId: ejecutar.tecnicoId,
+        },
+      });
       loadingEjecutar;
       await ejecutarEvent({
         variables: {
@@ -168,6 +196,7 @@ function EventMode({
           },
         ],
       });
+
       toast.success("Mantenimiento en ejecucion");
     } else if (mode == "C") {
       loadingCompletar;
@@ -274,12 +303,14 @@ function EventMode({
                       {!tecnicoId ? (
                         <div className="flex flex-col justify-evenly w-1/2 pr-2">
                           <span className="pl-2">Tecnico Responsable</span>
-                          <input
-                            type="date"
-                            className="p-2 rounded-md bg-gray-200"
-                            name="start"
-                            value={reprogramar.start}
-                            onChange={handleChange}
+                          <Select
+                            options={listTecnicos}
+                            placeholder={"Selecciona el tecnico responsable"}
+                            name="tecnico_id"
+                            value={selectedOptionTecnico}
+                            onChange={(selected) =>
+                              handleSelectChangeTec(selected)
+                            }
                           />
                         </div>
                       ) : (
