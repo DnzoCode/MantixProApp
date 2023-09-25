@@ -1,5 +1,5 @@
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Event from "./pages/Event/Event";
 import User from "./pages/User/User";
 import { baseUrl } from "./composables/useConfig";
@@ -22,6 +22,7 @@ export default function App() {
         <BrowserRouter>
           {/* Definición de rutas */}
           <Routes>
+            <Route path="/" element={<Navigate to={"/login"} />} />
             <Route path="/calendar" element={<Event />} />
             <Route path="/users" element={<User />} />
             <Route path="/maintenance/add" element={<Maintenance />} />
