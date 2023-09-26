@@ -1,8 +1,9 @@
-import express from "express"
-import { ApolloServer } from "@apollo/server"
-import {expressMiddleware } from "@apollo/server/express4"
-import cors from "cors"
-import http from "http"
+import express from "express";
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@apollo/server/express4";
+import cors from "cors";
+import http from "http";
+import { baseUrl } from "./composables/useConfig.js";
 
 export async function startApolloServer(typeDefs, resolvers) {
   const app = express();
@@ -20,10 +21,11 @@ export async function startApolloServer(typeDefs, resolvers) {
     httpServer.listen(
       {
         port: 4000,
+        host: baseUrl,
       },
       resolve
     )
   );
 
-  console.log("Server in http://localhost:4000/");
+  console.log(`Server in http://${baseUrl}:4000/`);
 }
